@@ -17,7 +17,7 @@ contract Subscription {
     }
 
     struct PolicyStatus {
-        bytes32 policyInfo;
+        bytes32 metadata;
         uint status;
     }
 
@@ -43,8 +43,8 @@ contract Subscription {
         Creator memory c;
         c.account = msg.sender;
         c.metadata = metadata;
-        c.policyInfo = policyInfo;
         c.membershipFee = fees;
+        c.members = 0;
         creators[msg.sender] = c;
         emit NewSubscriptionPage(msg.sender, metadata, fees);
     }
@@ -57,7 +57,7 @@ contract Subscription {
     function approveSubscription(address buyer) public {
         require(creators[msg.sender].account == msg.sender);
         buyers[buyer].subscription.status = 0;
-        policies[buyers[buyer].subscription.policyInfo].status = 0;
+        policies[buyers[buyer].subscription.metadata].status = 0;
         // release from escrow
         msg.sender.transfer(creators[msg.sender].membershipFee);
         emit ApprovedSubscription(msg.sender, buyer);
@@ -67,13 +67,13 @@ contract Subscription {
         // escrow payment
         require(msg.value >= creators[creator].membershipFee, "Insufficient funds");
         PolicyStatus memory p;
-        p.policyInfo = creators[creator].policyInfo;
+        p.metadata = creators[creator].metadata;
         p.status = 1;
         Buyer memory b;
         b.account = msg.sender;
         b.subscription = p;
         buyers[msg.sender] = b;
-        policies[creators[creator].policyInfo] = p;
+        policies[creators[creator].metadata] = p;
         emit NewSubscriber(msg.sender, creator);
     }
 }
