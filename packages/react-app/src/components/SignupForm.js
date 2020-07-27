@@ -1,15 +1,43 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import IPFS from "nano-ipfs-store";
+
+import { Web3Provider } from "@ethersproject/providers";
+import { Contract } from "@ethersproject/contracts";
+
+import { addresses, abis } from "@project/contracts";
+import bs58 from "bs58";
+
+const ipfs = IPFS.at("http://localhost:5001");
+const provider = new Web3Provider(window.ethereum);
+const signer = provider.getSigner();
+const contractObj = new Contract(addresses.contract, abis.contract, provider);
+
+
+const getBytes32FromIpfsHash = (ipfsListing) => {
+  return "0x"+bs58.decode(ipfsListing).slice(2).toString('hex');
+};
 
 export default function SignupForm() {
     const { register, handleSubmit } = useForm();
     
-    const onSubmit = (data) => {
-        const {name, handle, bio, nodeUrl} = data;
-        console.log(data);
+    const onSubmit = async formData => {
+        const { name, handle, bio, nodeUrl } = formData;
         console.log(name, handle, bio, nodeUrl);
-        // Call Init Alice on nodeURL
-        // Call get_policy_pubkey
+        // Call Init Alice on nodeURL and get policyMetadata
+        // const response = await fetch(`${nodeUrl}/initAliceAndGetKey/${handle}`)
+        // const policyMetadata = await response.json();
+        // Create IPFS Document, Upload and get hash
+        const ipfsDocument = {name, bio};
+        const ipfsHash = ipfs.add(ipfsDocument);
+        const ipfsBytes32 = getBytes32FromIpfsHash(ipfsHash);
+    
+        // Call the createSubscriptionPage function in the contract
+        const signedContract = contractObj.connect(signer);
+        // const eth = ethers.utils.parseEther("10")
+
+        await signedContract.createSubscriptionPage("10", ipfsBytes32);
+        
     };
 
     return (
