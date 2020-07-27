@@ -11,7 +11,7 @@ type Creator @entity {
 type Membership @entity {
   id: ID!
   creator: String!
-  status: Status
+  status: Status!
 }
 
 type Subscriber @entity {

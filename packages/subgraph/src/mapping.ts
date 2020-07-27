@@ -9,7 +9,6 @@ import {
 import { Creator, Subscriber, Membership } from "../generated/schema"
 import { loadFromIpfs } from "./ipfs"
 import { TransactionInfo, State } from "./transaction";
-import { asString } from "./util";
 
 export function handleNewSubscriptionPage(event: NewSubscriptionPage): void {
   let entity = new Creator(event.transaction.from.toHex())
@@ -56,17 +55,17 @@ export function handleApprovedSubscription(event: ApprovedSubscription): void {
   if (entity1 != null){
     let entity2 = Subscriber.load(event.params.buyer.toHex())
     if (entity2 != null){
-      let memberships = entity2.subscribed
-      let updatedMemberships = []
-      for (let i = 0; i < memberships.length; i++){
-        if (memberships[i].creator == event.transaction.from.toHex()){
-          let x = memberships[i]
-          x.status = "APPROVED"
-          updatedMemberships.push(x);
+      let id = entity2.subscribed
+      log.info("Entities ID", id);
+
+      for (let i = 0; i < id.length; i++){
+        let membership = Membership.load(id[i])
+        log.info("Membership", [membership.creator]);
+        if (membership.creator == event.transaction.from.toHex()){
+          membership.status = "APPROVED"
+          membership.save()
         }
-        updatedMemberships.push(memberships[i]);
       }
-      entity2.subscribed = updatedMemberships
       entity2.save()
       entity1.members.push(event.params.buyer.toHexString())
       entity1.save()
@@ -83,10 +82,10 @@ export function handleNewSubscriber(event: NewSubscriber): void {
   if (entity == null) {
     entity = new Subscriber(event.transaction.from.toHex())
     entity.address = event.params.buyer.toHexString();
-    entity.subscribed = [entity2]
+    entity.subscribed = [entity2.id]
   }
   else{
-    entity.subscribed.push(entity2)
+    entity.subscribed.push(entity2.id)
   }
   entity.save()
 }

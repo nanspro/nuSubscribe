@@ -145,21 +145,13 @@ export class Membership extends Entity {
     this.set("creator", Value.fromString(value));
   }
 
-  get status(): string | null {
+  get status(): string {
     let value = this.get("status");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toString();
-    }
+    return value.toString();
   }
 
-  set status(value: string | null) {
-    if (value === null) {
-      this.unset("status");
-    } else {
-      this.set("status", Value.fromString(value as string));
-    }
+  set status(value: string) {
+    this.set("status", Value.fromString(value));
   }
 }
 
