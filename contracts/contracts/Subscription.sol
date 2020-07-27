@@ -4,11 +4,11 @@ contract Subscription {
     address public owner;
 
     struct Creator {
-        bytes32 metadata;
         address account;
         uint membershipFee;
         bytes32[] posts;
-        bytes32 policyInfo;
+        bytes32 metadata;
+        uint members;
     }
 
     struct Buyer {
@@ -25,7 +25,7 @@ contract Subscription {
     mapping(address => Buyer) buyers;
     mapping(bytes32 => PolicyStatus) public policies;
 
-    event NewSubscriptionPage(address creator, bytes32 metadata, bytes32 policyInfo, uint fees);
+    event NewSubscriptionPage(address creator, bytes32 metadata, uint fees);
     event NewCreatorPost(address creator, bytes32 post);
     event ApprovedSubscription(address creator, address buyer);
     event NewSubscriber(address buyer, address creator);
@@ -38,28 +38,24 @@ contract Subscription {
         if (msg.sender == owner) _;
     }
 
-    modifier onlyCreator() {
-        Creator memory c = creators[msg.sender];
-        if (c.account == msg.sender) _;
-    }
-
-    // Creator creates a policy on nuCypher, passes it ot then create a subscription page
-    function createSubscriptionPage(uint fees, bytes32 metadata, bytes32 policyInfo) public {
+    // Creator creates a policy on nuCypher, passes it to then create a subscription page
+    function createSubscriptionPage(uint fees, bytes32 metadata) public {
         Creator memory c;
         c.account = msg.sender;
         c.metadata = metadata;
         c.policyInfo = policyInfo;
         c.membershipFee = fees;
         creators[msg.sender] = c;
-        emit NewSubscriptionPage(msg.sender, metadata, policyInfo, fees);
+        emit NewSubscriptionPage(msg.sender, metadata, fees);
     }
 
-    function createPost(bytes32 data) onlyCreator public {
+    function createPost(bytes32 data) public {
         creators[msg.sender].posts.push(data);
         emit NewCreatorPost(msg.sender, data);
     }
 
-    function approveSubscription(address buyer) onlyCreator public {
+    function approveSubscription(address buyer) public {
+        require(creators[msg.sender].account == msg.sender);
         buyers[buyer].subscription.status = 0;
         policies[buyers[buyer].subscription.policyInfo].status = 0;
         // release from escrow

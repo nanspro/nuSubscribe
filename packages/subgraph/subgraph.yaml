@@ -1,26 +1,32 @@
 specVersion: 0.0.2
-description: Subgraph that indexes the blockchain data
-repository: https://github.com/sablierhq/sablier-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: CeaErc20
-    network: mainnet
+    name: Contract
+    network: kovan
     source:
-      abi: erc20
-      address: "0xc1C0472c0C80bCcDC7F5D01A376Bd97a734B8815"
+      address: "0x99048f6dc86Cdd3ceFea1578E5594FE0A33422Ae"
+      abi: Contract
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
-      abis:
-        - name: erc20
-          file: ../contracts/src/abis/erc20.json
-      entities:
-        - Token
-        - Transfer
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-      file: ./src/mappings/transfers.ts
       language: wasm/assemblyscript
+      entities:
+        - NewSubscriptionPage
+        - NewCreatorPost
+        - ApprovedSubscription
+        - NewSubscriber
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: NewSubscriptionPage(address,bytes32,bytes32,uint256)
+          handler: handleNewSubscriptionPage
+        - event: NewCreatorPost(address,bytes32)
+          handler: handleNewCreatorPost
+        - event: ApprovedSubscription(address,address)
+          handler: handleApprovedSubscription
+        - event: NewSubscriber(address,address)
+          handler: handleNewSubscriber
+      file: ./src/mapping.ts

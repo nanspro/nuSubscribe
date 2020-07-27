@@ -1,13 +1,26 @@
-type Token @entity {
+type Creator @entity {
   id: ID!
-  decimals: Int
-  name: String
-  symbol: String
+  postsIpfsHash: [Bytes!]!
+  membershipFees: BigInt!
+  policyPubkey: String!
+  aliceSigPubkey: String!
+  label: String!
+  address: String!
+  members: [String!]!
+}
+type Membership @entity {
+  id: ID!
+  creator: String!
+  status: Status
 }
 
-type Transfer @entity {
+type Subscriber @entity {
   id: ID!
-  from: String!
-  to: String!
-  value: BigInt!
+  address: String!
+  subscribed: [Membership!]!
+}
+
+enum Status {
+  NEW
+  APPROVED
 }
