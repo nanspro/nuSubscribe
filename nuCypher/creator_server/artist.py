@@ -89,7 +89,11 @@ def get_policy_pubkey(label):
     policy_pubkey = alicia.get_policy_encrypting_key_from_label(label)
     # print("The policy public key for "
         #   "label '{}' is {}".format(label.decode("utf-8"), policy_pubkey.to_bytes().hex()))
-    return policy_pubkey
+    return json.dumps({
+        "policy_pubkey": policy_pubkey.to_bytes().hex(),
+        "alice_sig_pubkey": bytes(alicia.stamp).hex(),
+        "label": label.decode(),
+    })
 
 
 def grant_access_policy(label, bob_pubkeys):

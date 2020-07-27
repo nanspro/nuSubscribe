@@ -1,5 +1,5 @@
-import listener
-import listener_keys
+import buyer
+import buyer_keys
 import ipfshttpclient
 from flask import Flask, request, Response, jsonify
 
@@ -7,14 +7,14 @@ app = Flask(__name__)
 api = ipfshttpclient.connect('/dns/local-ipfs-node/tcp/5001/http')
 
 LABEL_TO_POLICY = {}
-PUBKEYS = listener_keys.get_listener_pubkeys()
-PRIVKEYS = listener_keys.get_listener_privkeys()
-LISTENER = listener.initialize_bob(PRIVKEYS)
+PUBKEYS =buyer_keys.get_buyer_pubkeys()
+PRIVKEYS = buyer_keys.get_buyer_privkeys()
+BUYER = buyer.initialize_bob(PRIVKEYS)
 
 @app.route('/join', methods = ["POST"])
 def join():
     policy_metadata = request.get_json()
-    label = listener.join_policy(LISTENER, policy_metadata)
+    label = buyer.join_policy(BUYER, policy_metadata)
     LABEL_TO_POLICY[label] = policy_metadata
     return label
 
@@ -24,7 +24,7 @@ def decrypt_track(label, ipfsHash):
     enc_data = api.cat(ipfsHash)
 
     print("Fetching encrypted track segment from ipfs", ipfsHash)
-    data = listener.reencrypt_segment(enc_data, LABEL_TO_POLICY[label], LISTENER)
+    data = buyer.reencrypt_segment(enc_data, LABEL_TO_POLICY[label], BUYER)
     if not data:
         print("Error decoding hash ", ipfsHash)
 

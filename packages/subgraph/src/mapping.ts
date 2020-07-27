@@ -36,7 +36,9 @@ export function handleNewSubscriptionPage(event: NewSubscriptionPage): void {
   tx.state.ipfsReqs = 0
   
   let ipfsData = loadFromIpfs(IpfsHash, tx)
-  entity.policyPubkey = ipfsData.get("policy_pubkey").toString()
+  // log.info("Ipfs Data", [ipfsData]);
+  log.info("IPFS Pub key: {}", [ipfsData.get("name").toString()])
+  entity.policyPubkey = ipfsData.get("name").toString()
   entity.label = ipfsData.get("label").toString()
   entity.aliceSigPubkey = ipfsData.get("alice_sig_pubkey").toString()
 
