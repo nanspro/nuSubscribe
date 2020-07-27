@@ -1,0 +1,26 @@
+type Creator @entity {
+  id: ID!
+  postsIpfsHash: [Bytes!]!
+  membershipFees: BigInt!
+  policyPubkey: String!
+  aliceSigPubkey: String!
+  label: String!
+  address: String!
+  members: [String!]!
+}
+type Membership @entity {
+  id: ID!
+  creator: String!
+  status: Status!
+}
+
+type Subscriber @entity {
+  id: ID!
+  address: String!
+  subscribed: [Membership!]!
+}
+
+enum Status {
+  NEW
+  APPROVED
+}

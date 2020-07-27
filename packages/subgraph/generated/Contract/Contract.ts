@@ -36,12 +36,8 @@ export class NewSubscriptionPage__Params {
     return this._event.parameters[1].value.toBytes();
   }
 
-  get policyInfo(): Bytes {
-    return this._event.parameters[2].value.toBytes();
-  }
-
   get fees(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -112,12 +108,12 @@ export class NewSubscriber__Params {
 }
 
 export class Contract__creatorsResult {
-  value0: Bytes;
-  value1: Address;
-  value2: BigInt;
-  value3: Bytes;
+  value0: Address;
+  value1: BigInt;
+  value2: Bytes;
+  value3: BigInt;
 
-  constructor(value0: Bytes, value1: Address, value2: BigInt, value3: Bytes) {
+  constructor(value0: Address, value1: BigInt, value2: Bytes, value3: BigInt) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
@@ -126,10 +122,10 @@ export class Contract__creatorsResult {
 
   toMap(): TypedMap<string, EthereumValue> {
     let map = new TypedMap<string, EthereumValue>();
-    map.set("value0", EthereumValue.fromFixedBytes(this.value0));
-    map.set("value1", EthereumValue.fromAddress(this.value1));
-    map.set("value2", EthereumValue.fromUnsignedBigInt(this.value2));
-    map.set("value3", EthereumValue.fromFixedBytes(this.value3));
+    map.set("value0", EthereumValue.fromAddress(this.value0));
+    map.set("value1", EthereumValue.fromUnsignedBigInt(this.value1));
+    map.set("value2", EthereumValue.fromFixedBytes(this.value2));
+    map.set("value3", EthereumValue.fromUnsignedBigInt(this.value3));
     return map;
   }
 }
@@ -175,10 +171,10 @@ export class Contract extends SmartContract {
     let result = super.call("creators", [EthereumValue.fromAddress(param0)]);
 
     return new Contract__creatorsResult(
-      result[0].toBytes(),
-      result[1].toAddress(),
-      result[2].toBigInt(),
-      result[3].toBytes()
+      result[0].toAddress(),
+      result[1].toBigInt(),
+      result[2].toBytes(),
+      result[3].toBigInt()
     );
   }
 
@@ -190,10 +186,10 @@ export class Contract extends SmartContract {
     let value = result.value;
     return CallResult.fromValue(
       new Contract__creatorsResult(
-        value[0].toBytes(),
-        value[1].toAddress(),
-        value[2].toBigInt(),
-        value[3].toBytes()
+        value[0].toAddress(),
+        value[1].toBigInt(),
+        value[2].toBytes(),
+        value[3].toBigInt()
       )
     );
   }
@@ -270,10 +266,6 @@ export class CreateSubscriptionPageCall__Inputs {
 
   get metadata(): Bytes {
     return this._call.inputValues[1].value.toBytes();
-  }
-
-  get policyInfo(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
   }
 }
 

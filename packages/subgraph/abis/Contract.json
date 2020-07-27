@@ -13,10 +13,10 @@
     "inputs": [{ "name": "", "type": "address" }],
     "name": "creators",
     "outputs": [
-      { "name": "metadata", "type": "bytes32" },
       { "name": "account", "type": "address" },
       { "name": "membershipFee", "type": "uint256" },
-      { "name": "policyInfo", "type": "bytes32" }
+      { "name": "metadata", "type": "bytes32" },
+      { "name": "members", "type": "uint256" }
     ],
     "payable": false,
     "stateMutability": "view",
@@ -27,7 +27,7 @@
     "inputs": [{ "name": "", "type": "bytes32" }],
     "name": "policies",
     "outputs": [
-      { "name": "policyInfo", "type": "bytes32" },
+      { "name": "metadata", "type": "bytes32" },
       { "name": "status", "type": "uint256" }
     ],
     "payable": false,
@@ -45,7 +45,6 @@
     "inputs": [
       { "indexed": false, "name": "creator", "type": "address" },
       { "indexed": false, "name": "metadata", "type": "bytes32" },
-      { "indexed": false, "name": "policyInfo", "type": "bytes32" },
       { "indexed": false, "name": "fees", "type": "uint256" }
     ],
     "name": "NewSubscriptionPage",
@@ -82,8 +81,7 @@
     "constant": false,
     "inputs": [
       { "name": "fees", "type": "uint256" },
-      { "name": "metadata", "type": "bytes32" },
-      { "name": "policyInfo", "type": "bytes32" }
+      { "name": "metadata", "type": "bytes32" }
     ],
     "name": "createSubscriptionPage",
     "outputs": [],

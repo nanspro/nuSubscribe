@@ -1,5 +1,5 @@
 {
-  "name": "nuSubscribe-subgraph",
+  "name": "nuSubscribe",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
