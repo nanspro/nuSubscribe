@@ -1,50 +1,74 @@
-import React from "react";
-import logo from "./ethereumLogo.png";
-import { Contract } from "@ethersproject/contracts";
-import { getDefaultProvider } from "@ethersproject/providers";
-import { gql } from "apollo-boost";
-import { useQuery } from "@apollo/react-hooks";
-import { addresses, abis } from "@project/contracts";
+import React, {useState} from "react";
+import { Link, Router } from "@reach/router";
 import "./App.css";
 
-import SignupForm from "./components/SignupForm"
+import SignupForm from "./components/SignupForm";
+import LoginForm from "./components/LoginForm";
+import UploadBox from "./components/UploadBox";
+import CreatorList from "./components/CreatorList";
+import CreatorPage from "./components/CreatorPage";
 
-const GET_TRANSFERS = gql`
-  {
-    transfers(first: 10) {
-      id
-      from
-      to
-      value
-    }
-  }
-`;
 
-async function readOnChainData() {
-  // Should replace with the end-user wallet, e.g. Metamask
-  const defaultProvider = getDefaultProvider();
-  // Create an instance of an ethers.js Contract
-  // Read more about ethers.js on https://docs.ethers.io/v5/api/contract/contract/
-  const ceaErc20 = new Contract(addresses.ceaErc20, abis.erc20, defaultProvider);
-  // A pre-defined address that owns some CEAERC20 tokens
-  const tokenBalance = await ceaErc20.balanceOf("0x3f8CB69d9c0ED01923F11c829BaE4D9a4CB6c82C");
-  console.log({ tokenBalance: tokenBalance.toString() });
+function LogoutForm (props) {
+props.setUserType(false);
+props.setNodeUrl("");
+props.setUserHandle("");
+return (<></>)
 }
-
-function App() {
-  const { loading, error, data } = useQuery(GET_TRANSFERS);
-
-  React.useEffect(() => {
-    if (!loading && !error && data && data.transfers) {
-      console.log({ transfers: data.transfers });
-    }
-  }, [loading, error, data]);
+export default function App() {
+  const [userType, setUserType] = useState(false);
+  const [nodeUrl, setNodeUrl] = useState(false);
+  const [userHandle, setUserHandle] = useState(false);
 
   return (
-    <div className="App">
-      <SignupForm />
-    </div>
+    <center>
+      <h1>Welcome to NuSubscribe!</h1>
+      <p>
+        {userType == "creator"
+          ? "You are logged as a creator"
+          : userType == "buyer"
+          ? "You are logged as a subscriber"
+          : "You are currently not logged in"}{" "}
+      </p>
+
+      <nav>
+        {!userType && (
+          <>
+            <Link to="signup">Creator Sign Up</Link>
+            <Link to="login">Log In</Link>
+          </>
+        )}
+        {userType && (
+          <>
+            <Link to="logout">Log Out</Link>
+          </>
+        )}
+        {userType === "creator" && (
+          <>
+            <Link to="upload">upload</Link>
+          </>
+        )}
+        <Link to="creators">View Creators</Link>
+      </nav>
+
+      <Router>
+        <SignupForm path="/signup" />
+        <LoginForm
+          path="/login"
+          setUserType={setUserType}
+          setNodeUrl={setNodeUrl}
+          setUserHandle={setUserHandle}
+        />
+        <LogoutForm
+          path="/logout"
+          setUserType={setUserType}
+          setNodeUrl={setNodeUrl}
+          setUserHandle={setUserHandle}
+        />
+        <UploadBox path="/upload" handle={userHandle} nodeUrl={nodeUrl} />
+        <CreatorList path="/creators" />
+        <CreatorPage path="/creators/:creatorHandle" nodeUrl={nodeUrl} />
+      </Router>
+    </center>
   );
 }
-
-export default App;

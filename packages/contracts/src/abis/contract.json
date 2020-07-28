@@ -1,5 +1,19 @@
 [
   {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "buyer",
+        "type": "address"
+      }
+    ],
+    "name": "approveSubscription",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "owner",
@@ -11,6 +25,24 @@
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "fees",
+        "type": "uint256"
+      },
+      {
+        "name": "metadata",
+        "type": "bytes32"
+      }
+    ],
+    "name": "createSubscriptionPage",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -45,6 +77,20 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "data",
+        "type": "bytes32"
+      }
+    ],
+    "name": "createPost",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [
       {
@@ -65,6 +111,20 @@
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "creator",
+        "type": "address"
+      }
+    ],
+    "name": "createSubscription",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -145,65 +205,5 @@
     ],
     "name": "NewSubscriber",
     "type": "event"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "fees",
-        "type": "uint256"
-      },
-      {
-        "name": "metadata",
-        "type": "bytes32"
-      }
-    ],
-    "name": "createSubscriptionPage",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "data",
-        "type": "bytes32"
-      }
-    ],
-    "name": "createPost",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "buyer",
-        "type": "address"
-      }
-    ],
-    "name": "approveSubscription",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "creator",
-        "type": "address"
-      }
-    ],
-    "name": "createSubscription",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
   }
 ]
