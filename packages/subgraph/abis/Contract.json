@@ -1,37 +1,41 @@
 [
   {
-    "constant": true,
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{ "name": "", "type": "address" }],
+    "constant": false,
+    "inputs": [{ "name": "buyer", "type": "address" }],
+    "name": "approveSubscription",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [{ "name": "", "type": "address" }],
-    "name": "creators",
-    "outputs": [
-      { "name": "account", "type": "address" },
-      { "name": "membershipFee", "type": "uint256" },
-      { "name": "metadata", "type": "bytes32" },
-      { "name": "members", "type": "uint256" }
-    ],
+    "constant": false,
+    "inputs": [{ "name": "data", "type": "bytes32" }],
+    "name": "createPost",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [{ "name": "", "type": "bytes32" }],
-    "name": "policies",
-    "outputs": [
-      { "name": "metadata", "type": "bytes32" },
-      { "name": "status", "type": "uint256" }
+    "constant": false,
+    "inputs": [{ "name": "creator", "type": "address" }],
+    "name": "createSubscription",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "fees", "type": "uint256" },
+      { "name": "metadata", "type": "bytes32" }
     ],
+    "name": "createSubscriptionPage",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -78,42 +82,38 @@
     "type": "event"
   },
   {
-    "constant": false,
-    "inputs": [
-      { "name": "fees", "type": "uint256" },
-      { "name": "metadata", "type": "bytes32" }
+    "constant": true,
+    "inputs": [{ "name": "", "type": "address" }],
+    "name": "creators",
+    "outputs": [
+      { "name": "account", "type": "address" },
+      { "name": "membershipFee", "type": "uint256" },
+      { "name": "metadata", "type": "bytes32" },
+      { "name": "members", "type": "uint256" }
     ],
-    "name": "createSubscriptionPage",
-    "outputs": [],
     "payable": false,
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [{ "name": "data", "type": "bytes32" }],
-    "name": "createPost",
-    "outputs": [],
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "name": "", "type": "address" }],
     "payable": false,
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [{ "name": "buyer", "type": "address" }],
-    "name": "approveSubscription",
-    "outputs": [],
+    "constant": true,
+    "inputs": [{ "name": "", "type": "bytes32" }],
+    "name": "policies",
+    "outputs": [
+      { "name": "metadata", "type": "bytes32" },
+      { "name": "status", "type": "uint256" }
+    ],
     "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{ "name": "creator", "type": "address" }],
-    "name": "createSubscription",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
+    "stateMutability": "view",
     "type": "function"
   }
 ]

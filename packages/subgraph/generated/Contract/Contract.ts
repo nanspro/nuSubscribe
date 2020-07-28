@@ -152,21 +152,6 @@ export class Contract extends SmartContract {
     return new Contract("Contract", address);
   }
 
-  owner(): Address {
-    let result = super.call("owner", []);
-
-    return result[0].toAddress();
-  }
-
-  try_owner(): CallResult<Address> {
-    let result = super.tryCall("owner", []);
-    if (result.reverted) {
-      return new CallResult();
-    }
-    let value = result.value;
-    return CallResult.fromValue(value[0].toAddress());
-  }
-
   creators(param0: Address): Contract__creatorsResult {
     let result = super.call("creators", [EthereumValue.fromAddress(param0)]);
 
@@ -194,6 +179,21 @@ export class Contract extends SmartContract {
     );
   }
 
+  owner(): Address {
+    let result = super.call("owner", []);
+
+    return result[0].toAddress();
+  }
+
+  try_owner(): CallResult<Address> {
+    let result = super.tryCall("owner", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
+  }
+
   policies(param0: Bytes): Contract__policiesResult {
     let result = super.call("policies", [EthereumValue.fromFixedBytes(param0)]);
 
@@ -217,28 +217,92 @@ export class Contract extends SmartContract {
   }
 }
 
-export class ConstructorCall extends EthereumCall {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
+export class ApproveSubscriptionCall extends EthereumCall {
+  get inputs(): ApproveSubscriptionCall__Inputs {
+    return new ApproveSubscriptionCall__Inputs(this);
   }
 
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
+  get outputs(): ApproveSubscriptionCall__Outputs {
+    return new ApproveSubscriptionCall__Outputs(this);
   }
 }
 
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
+export class ApproveSubscriptionCall__Inputs {
+  _call: ApproveSubscriptionCall;
 
-  constructor(call: ConstructorCall) {
+  constructor(call: ApproveSubscriptionCall) {
+    this._call = call;
+  }
+
+  get buyer(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class ApproveSubscriptionCall__Outputs {
+  _call: ApproveSubscriptionCall;
+
+  constructor(call: ApproveSubscriptionCall) {
     this._call = call;
   }
 }
 
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
+export class CreatePostCall extends EthereumCall {
+  get inputs(): CreatePostCall__Inputs {
+    return new CreatePostCall__Inputs(this);
+  }
 
-  constructor(call: ConstructorCall) {
+  get outputs(): CreatePostCall__Outputs {
+    return new CreatePostCall__Outputs(this);
+  }
+}
+
+export class CreatePostCall__Inputs {
+  _call: CreatePostCall;
+
+  constructor(call: CreatePostCall) {
+    this._call = call;
+  }
+
+  get data(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+}
+
+export class CreatePostCall__Outputs {
+  _call: CreatePostCall;
+
+  constructor(call: CreatePostCall) {
+    this._call = call;
+  }
+}
+
+export class CreateSubscriptionCall extends EthereumCall {
+  get inputs(): CreateSubscriptionCall__Inputs {
+    return new CreateSubscriptionCall__Inputs(this);
+  }
+
+  get outputs(): CreateSubscriptionCall__Outputs {
+    return new CreateSubscriptionCall__Outputs(this);
+  }
+}
+
+export class CreateSubscriptionCall__Inputs {
+  _call: CreateSubscriptionCall;
+
+  constructor(call: CreateSubscriptionCall) {
+    this._call = call;
+  }
+
+  get creator(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class CreateSubscriptionCall__Outputs {
+  _call: CreateSubscriptionCall;
+
+  constructor(call: CreateSubscriptionCall) {
     this._call = call;
   }
 }
@@ -277,92 +341,28 @@ export class CreateSubscriptionPageCall__Outputs {
   }
 }
 
-export class CreatePostCall extends EthereumCall {
-  get inputs(): CreatePostCall__Inputs {
-    return new CreatePostCall__Inputs(this);
+export class ConstructorCall extends EthereumCall {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
   }
 
-  get outputs(): CreatePostCall__Outputs {
-    return new CreatePostCall__Outputs(this);
-  }
-}
-
-export class CreatePostCall__Inputs {
-  _call: CreatePostCall;
-
-  constructor(call: CreatePostCall) {
-    this._call = call;
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
   }
 }
 
-export class CreatePostCall__Outputs {
-  _call: CreatePostCall;
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
 
-  constructor(call: CreatePostCall) {
+  constructor(call: ConstructorCall) {
     this._call = call;
   }
 }
 
-export class ApproveSubscriptionCall extends EthereumCall {
-  get inputs(): ApproveSubscriptionCall__Inputs {
-    return new ApproveSubscriptionCall__Inputs(this);
-  }
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
 
-  get outputs(): ApproveSubscriptionCall__Outputs {
-    return new ApproveSubscriptionCall__Outputs(this);
-  }
-}
-
-export class ApproveSubscriptionCall__Inputs {
-  _call: ApproveSubscriptionCall;
-
-  constructor(call: ApproveSubscriptionCall) {
-    this._call = call;
-  }
-
-  get buyer(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class ApproveSubscriptionCall__Outputs {
-  _call: ApproveSubscriptionCall;
-
-  constructor(call: ApproveSubscriptionCall) {
-    this._call = call;
-  }
-}
-
-export class CreateSubscriptionCall extends EthereumCall {
-  get inputs(): CreateSubscriptionCall__Inputs {
-    return new CreateSubscriptionCall__Inputs(this);
-  }
-
-  get outputs(): CreateSubscriptionCall__Outputs {
-    return new CreateSubscriptionCall__Outputs(this);
-  }
-}
-
-export class CreateSubscriptionCall__Inputs {
-  _call: CreateSubscriptionCall;
-
-  constructor(call: CreateSubscriptionCall) {
-    this._call = call;
-  }
-
-  get creator(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class CreateSubscriptionCall__Outputs {
-  _call: CreateSubscriptionCall;
-
-  constructor(call: CreateSubscriptionCall) {
+  constructor(call: ConstructorCall) {
     this._call = call;
   }
 }

@@ -1,12 +1,14 @@
 type Creator @entity {
   id: ID!
-  postsIpfsHash: [Bytes!]!
+  postsIpfsHash: [String!]!
   membershipFees: BigInt!
   policyPubkey: String!
   aliceSigPubkey: String!
   label: String!
   address: String!
   members: [String!]!
+  name: String!
+  bio: String!
 }
 type Membership @entity {
   id: ID!

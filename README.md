@@ -18,4 +18,52 @@ We created a subgraph for our smart contracts so that we can show relevant infor
 
 ## How to run locally
 
+### Smart Contracts
+```
+cd contracts
+yarn
+truffle compile
+truffle migrate -- reset --network development
+```
 
+Deployed Contract on kovan: `0x104c64a7293d41411b9e2046c3b8e7710287753f`
+
+### Graph
+You can view the graph here: https://thegraph.com/explorer/subgraph/nanspro/nusubscribe
+![Deployed Graph](./misc/graph.jpeg)
+
+```
+cd packages/subgraph
+yarn
+yarn deploy
+```
+
+### React App
+```
+cd packages/react-app
+yarn start
+```
+![Sign up](./misc/signup.jpeg)
+![Login](./misc/metamask.jpeg)
+
+
+### NuCypher
+- In the shell that opens run ursulas using `nucypher ursula run --dev --federated-only --rest-port 11500 &` and `nucypher ursula run --dev --federated-only --rest-port 11501 --teacher localhost:11500 &`
+
+- Next we run nuCypher/creator_server/server.py and nuCypher/buyer_server/server.py creator and buyer servers
+
+- We pass the node url to FE while signing up so that FE can talk to these servers and operations such as encryption and decryption happens locally on user's machine without compromising any keys
+
+![See All Creators](./misc/allCreators.jpeg)
+![Decrypted content](./misc/decr.jpeg)
+
+
+## Challenges Faced
+- Frequent failure of ursulas with hard to understand errors. It was not possible to understand what went wrong without being extremely familiar with nuCypher as the errors usually didn't make sense at once. So the only option was to restart the whole network again and again which sometimes changed alice's keys and stuff resulting in all contract calls again
+
+- It's hard to send nuCypher related data through apis so we had to structure it properly all the time. Like for ex:
+```python
+bobpubkeys["enc"] = UmbralPublicKey.from_bytes(bytes.fromhex(bob_pub_keys["enc"]))
+bobpubkeys["sig"] = UmbralPublicKey.from_bytes(bytes.fromhex(bob_pub_keys["sig"]))
+```
+- One of the most important things which could be improved with nuCypher is allowing nuCypher related operations from browser itself instead of writing a new backend server with rest apis everytime we want to interact with nuCypher. Interaction with nuCypher from scripts is super easy and amazing but when you try to interact through apis it becomes so cumbersome because of frequent errors due to improper formatting of data, ursulas failing for no reason (probably due to corrupt data or we are not sure).

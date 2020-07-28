@@ -42,13 +42,13 @@ export class Creator extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get postsIpfsHash(): Array<Bytes> {
+  get postsIpfsHash(): Array<string> {
     let value = this.get("postsIpfsHash");
-    return value.toBytesArray();
+    return value.toStringArray();
   }
 
-  set postsIpfsHash(value: Array<Bytes>) {
-    this.set("postsIpfsHash", Value.fromBytesArray(value));
+  set postsIpfsHash(value: Array<string>) {
+    this.set("postsIpfsHash", Value.fromStringArray(value));
   }
 
   get membershipFees(): BigInt {
@@ -103,6 +103,24 @@ export class Creator extends Entity {
 
   set members(value: Array<string>) {
     this.set("members", Value.fromStringArray(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get bio(): string {
+    let value = this.get("bio");
+    return value.toString();
+  }
+
+  set bio(value: string) {
+    this.set("bio", Value.fromString(value));
   }
 }
 

@@ -26,9 +26,7 @@ export function handleNewSubscriptionPage(event: NewSubscriptionPage): void {
   let IpfsHash = ipfsHashBytes.toBase58()
 
   log.info("IPFS HASH: {}", [IpfsHash])
-
   let tx: TransactionInfo
-  
   tx.blockNumber = event.block.number.toI32()
   tx.timestamp = event.block.timestamp.toI32()
   tx.from = event.transaction.from
@@ -38,18 +36,34 @@ export function handleNewSubscriptionPage(event: NewSubscriptionPage): void {
   let ipfsData = loadFromIpfs(IpfsHash, tx)
   // log.info("Ipfs Data", [ipfsData]);
   log.info("IPFS Pub key: {}", [ipfsData.get("name").toString()])
-  entity.policyPubkey = ipfsData.get("name").toString()
+  entity.policyPubkey = ipfsData.get("policyPubkey").toString()
   entity.label = ipfsData.get("label").toString()
-  entity.aliceSigPubkey = ipfsData.get("alice_sig_pubkey").toString()
-
+  entity.aliceSigPubkey = ipfsData.get("aliceSigPubkey").toString()
+  entity.name = ipfsData.get("name").toString()
+  entity.bio = ipfsData.get("bio").toString()
   entity.save()
 }
 
 export function handleNewCreatorPost(event: NewCreatorPost): void {
   let entity = Creator.load(event.transaction.from.toHex())
   if (entity != null){
-    entity.postsIpfsHash.push(event.params.post); 
+    let ipfsHex = event.params.post.toHexString()
+    let ipfsHashHex = '1220' + ipfsHex.slice(2)
+    ipfsHashHex = '0x' + ipfsHashHex
+
+    let ipfsHashBytes = Bytes.fromHexString(ipfsHashHex)
+    let IpfsHash = ipfsHashBytes.toBase58()
+    log.debug("Post data {}", [IpfsHash]);
+    log.debug("Post data000 {}", [entity.label]);
+    let lol = entity.postsIpfsHash;
+    lol.push(IpfsHash);
+    log.debug("Posts IPFSSSSSS HASHESSS {}", lol);
+    entity.postsIpfsHash = lol;
+    log.debug("Post data 2 {}", [IpfsHash]);
+    log.debug("Posts IPFSSSSSS HASHESSS 2{}", entity.postsIpfsHash);
   }
+  entity.save();
+
 }
 
 export function handleApprovedSubscription(event: ApprovedSubscription): void {
